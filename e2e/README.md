@@ -38,6 +38,11 @@ npm run test:e2e -- --grep "matricula"
 npm run test:e2e:report
 ```
 
+O relatório é servido em `127.0.0.1`, com uma porta disponível escolhida
+automaticamente. Acesse o endereço informado no terminal. Mantenha o terminal desse
+comando aberto enquanto consulta os resultados. A listagem usa apenas o
+reporter de texto para preservar o HTML da última execução.
+
 O script encerra os contêineres ao terminar, inclusive se os testes falharem.
 Os logs ficam em `e2e-artifacts/compose.log`; o relatório HTML em
 `playwright-report/`; capturas e traces de falhas em `test-results/`.

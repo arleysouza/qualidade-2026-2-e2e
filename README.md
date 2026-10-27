@@ -84,11 +84,28 @@ Execute na raiz:
 
 ### Relatórios e diagnóstico
 
+Execute `npm run test:e2e:report` e acesse o endereço informado no terminal.
+O servidor escolhe automaticamente uma porta disponível em `127.0.0.1`.
+Mantenha o terminal aberto enquanto consulta o relatório e pressione **Ctrl+C**
+ao terminar para encerrar o servidor. O comando de
+listagem usa apenas saída de texto e preserva o HTML da última execução.
+
 | Local | Conteúdo |
 | --- | --- |
 | `playwright-report/index.html` | Relatório HTML com os resultados por cenário. |
 | `test-results/` | Capturas de tela e traces preservados quando há falhas. |
+| `test-results/.last-run.json` | Estado da última execução e identificação dos testes que falharam. |
 | `e2e-artifacts/compose.log` | Logs do banco, da API e do frontend. |
+
+Essas pastas são geradas automaticamente e estão no `.gitignore`. Podem ser
+apagadas quando seus resultados não forem mais necessários; serão recriadas
+nas próximas execuções que produzirem esses arquivos. Excluir `playwright-report/`
+remove o relatório disponível para consulta até executar os testes novamente.
+
+O Playwright cria `test-results/`; o script `e2e/run.cjs` cria `e2e-artifacts/`
+para salvar os logs antes de encerrar os contêineres. Em uma execução sem falhas,
+é normal que `test-results/` contenha apenas `.last-run.json`, pois a configuração
+preserva capturas e traces somente nas falhas.
 
 O trace permite investigar as ações do navegador, as requisições e o estado da página. Para abrir um arquivo produzido por uma falha:
 
@@ -103,6 +120,11 @@ docker compose -f compose.e2e.yml -p aula4-e2e down --remove-orphans
 ```
 
 ## Organização da suíte
+
+A pasta `e2e/` reúne o código dos testes e sua infraestrutura. Ela fica na raiz
+porque os cenários verificam frontend, API e banco em conjunto. Essa localização
+é uma escolha de organização do projeto; a descoberta dos testes é definida por
+`testDir: './e2e'` em `playwright.config.ts`.
 
 | Arquivo | Responsabilidade |
 | --- | --- |
