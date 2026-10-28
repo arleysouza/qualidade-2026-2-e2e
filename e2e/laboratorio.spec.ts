@@ -1,5 +1,24 @@
 import { test, expect, send } from './support';
 
+test('cadastra um aluno pela interface', async ({ page }) => {
+  await page.getByLabel('Operação', { exact: true })
+    .selectOption('students-create');
+
+  await page.getByLabel('Corpo da requisição · JSON', { exact: true })
+    .fill(JSON.stringify({
+      ra: 900003,
+      name: 'Mariana',
+    }));
+
+  await page.getByRole('button', { name: 'Enviar requisição →' }).click();
+
+  await expect(page.getByRole('status')).toContainText('201');
+  await expect(page.getByRole('region', {
+    name: 'Corpo da resposta',
+    exact: true,
+  })).toContainText('Mariana');
+});
+
 test('seleciona operações e prepara a requisição', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Laboratório REST.' })).toBeVisible();
   await expect(page.getByRole('status')).toHaveAttribute('data-state', 'idle');

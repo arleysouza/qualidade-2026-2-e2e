@@ -17,11 +17,54 @@ O banco não publica portas e usa armazenamento temporário.
 Antes de cada cenário, a fixture executa `TRUNCATE` e reaplica `database/seed.sql`
 somente no banco `aula4_e2e` desse projeto Docker. Os testes executam em sequência,
 com um worker e sem novas tentativas automáticas. Não execute duas suítes ao mesmo tempo.
-As operações verificadas passam pela interface, Nginx, Express e PostgreSQL reais,
-sem interceptação ou simulação das respostas da API.
+Os cenários que enviam requisições exercitam o caminho completo: navegador,
+interface web, Nginx, API Express e PostgreSQL, sem interceptação ou simulação
+das respostas da API. A suíte também verifica comportamentos locais da interface,
+como a preparação da requisição e o bloqueio de JSON inválido antes do envio.
+
+## Primeiro teste: ações explícitas
+
+O primeiro cenário de `laboratorio.spec.ts`, `cadastra um aluno pela interface`,
+mostra cada etapa: `getByLabel` localiza os campos pelos rótulos,
+`selectOption` seleciona a operação e `fill` preenche o JSON de Mariana.
+Em seguida, `getByRole` localiza o botão para o clique, e as asserções com
+`expect` verificam o status 201 e o nome no corpo da resposta exibido na interface.
+
+O teste importa `test` e `expect` de `./support`, preservando a fixture que
+restaura o banco e abre a página antes de cada cenário.
+
+Depois desse exemplo, o auxiliar `send()` de `support.ts` reutiliza as operações
+comuns de seleção, preenchimento, envio e verificação da resposta nos demais
+cenários. Assim, uma chamada como
+`await send(page, 'students-create', 201, { body: student })` reúne essas etapas.
+
+## Como apresentar o projeto na aula
+
+A interface é um laboratório de requisições REST: permite selecionar operações,
+editar JSON, enviar requisições e observar respostas. Essas interações são o
+objeto dos testes E2E e podem ser usadas diretamente para ensinar automação no
+navegador, sem reestruturar a aplicação.
+
+Ordem sugerida para apresentar os exemplos:
+
+1. Cadastro de aluno com ações explícitas: localizar campos, selecionar a
+   operação, preencher o JSON, clicar e verificar o resultado visível.
+2. Consulta do aluno cadastrado: mostrar a consulta após o cadastro no mesmo
+   cenário, como ocorre no fluxo completo. Cada teste restaura o banco antes de
+   começar; um cenário não depende dos dados criados pelo anterior.
+3. Fluxo completo de matrícula: apresentar `send()` como reutilização das ações
+   comuns e acompanhar o cadastro de aluno e disciplina, a matrícula e as
+   consultas após recarregar a página.
+4. Apresentação de um erro HTTP: observar o código e o corpo da resposta na
+   interface e as verificações correspondentes no teste.
+5. Bloqueio de JSON inválido: mostrar que a validação local impede o envio e
+   que a requisição funciona após corrigir o corpo.
+6. Fixtures, restauração do banco e relatórios: explicar o `test` de `./support`,
+   o isolamento entre cenários e a consulta dos resultados e traces.
 
 ## Cenários
 
+- Cadastro de um aluno pela interface, com as ações explícitas.
 - Seleção da operação e prévia da requisição.
 - Listagem e busca dos dados iniciais de alunos, disciplinas e matrículas.
 - Cadastro de aluno e disciplina, matrícula e consulta após recarregar a página.

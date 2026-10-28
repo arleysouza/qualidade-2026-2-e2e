@@ -9,7 +9,7 @@ services:
     tmpfs:
       - /var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d aula4_e2e"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d aula4_e2e"]
       interval: 1s
       timeout: 5s
       retries: 30

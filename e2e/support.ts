@@ -38,6 +38,7 @@ export async function send(page: Page, operation: string, status: number,
   await page.getByRole('button', { name: 'Enviar requisição →' }).click();
   const response = await responsePromise;
   expect(response.status()).toBe(status);
+  await expect(page.getByRole('status')).toContainText(String(status));
   await expect(page.getByRole('status')).toHaveAttribute('data-status-code', String(status));
   await expect(page.getByRole('status')).toHaveAttribute('data-state', status < 400 ? 'success' : 'http-error');
   await expect(page.getByRole('region', { name: 'Resposta', exact: true }))

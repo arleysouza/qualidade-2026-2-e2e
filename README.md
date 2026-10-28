@@ -6,18 +6,19 @@ A suíte de testes de ponta a ponta (E2E) usa **Playwright Test com TypeScript**
 
 ## O que os testes verificam
 
-Cada operação exercita o caminho completo:
+Os cenários que enviam requisições exercitam o caminho completo: navegador, interface web, Nginx, API Express e PostgreSQL. A suíte também verifica comportamentos locais da interface, como a preparação da requisição e o bloqueio de JSON inválido antes do envio.
 
 ```text
 Playwright → navegador → interface web → Nginx → API Express → PostgreSQL
 ```
 
-Os testes selecionam operações, preenchem campos e clicam em “Enviar requisição”. Depois verificam o status, os headers e o corpo apresentados na página, comparando o JSON exibido com a resposta HTTP recebida. A API e o banco são reais, sem mocks.
+Nos cenários que enviam requisições, os testes selecionam operações, preenchem campos e clicam em “Enviar requisição”. Depois verificam o status, os headers e o corpo apresentados na página, comparando o JSON exibido com a resposta HTTP recebida. A API e o banco são reais, sem mocks.
 
-A suíte contém **12 cenários**:
+A suíte contém **13 cenários**:
 
 | Grupo | Casos | Verificações |
 | --- | --- | --- |
+| Cadastro pela interface | 1 | Seleção, preenchimento e clique explícitos; status 201 e nome no corpo da resposta. |
 | Preparação da requisição | 1 | Seleção da operação, método, caminho, habilitação do corpo e prévia do JSON. |
 | Listagens | 3 | Dados iniciais de alunos, disciplinas e matrículas. |
 | Buscas | 3 | Consulta de um registro inicial de cada recurso. |
@@ -57,7 +58,7 @@ Não é necessário iniciar a aplicação manualmente. O comando:
 4. Executa os testes em sequência no Chromium.
 5. Salva os logs dos serviços e encerra os contêineres, inclusive quando os testes falham.
 
-Uma execução bem-sucedida apresenta `12 passed`. A instalação do navegador e a primeira construção das imagens podem levar mais tempo.
+Uma execução bem-sucedida apresenta `13 passed`. A instalação do navegador e a primeira construção das imagens podem levar mais tempo.
 
 ### Isolamento e dados
 
