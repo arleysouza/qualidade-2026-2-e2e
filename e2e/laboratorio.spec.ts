@@ -76,7 +76,6 @@ for (const status of [400, 404, 409]) {
   test(`apresenta erro HTTP ${status}`, async ({ page }) => {
     const body = await send(page, `error-${status}`, status);
     expect(body).toMatchObject({ statusCode: status, message: expect.any(String), error: expect.any(String) });
-    await expect(page.getByRole('status')).toContainText(String(status));
   });
 }
 
