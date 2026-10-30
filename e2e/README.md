@@ -22,21 +22,20 @@ interface web, Nginx, API Express e PostgreSQL, sem interceptação ou simulaç�
 das respostas da API. A suíte também verifica comportamentos locais da interface,
 como a preparação da requisição e o bloqueio de JSON inválido antes do envio.
 
-## Primeiro teste: ações explícitas
+## Primeiro teste: cadastro com `send()`
 
 O primeiro cenário de `laboratorio.spec.ts`, `cadastra um aluno pela interface`,
-mostra cada etapa: `getByLabel` localiza os campos pelos rótulos,
-`selectOption` seleciona a operação e `fill` preenche o JSON de Mariana.
-Em seguida, `getByRole` localiza o botão para o clique, e as asserções com
-`expect` verificam o status 201 e o nome no corpo da resposta exibido na interface.
+define o objeto de Mariana uma única vez e o reutiliza no envio e na comparação
+do resultado com `toEqual(student)`.
 
-O teste importa `test` e `expect` de `./support`, preservando a fixture que
+O teste importa `test`, `expect` e `send` de `./support`, preservando a fixture que
 restaura o banco e abre a página antes de cada cenário.
 
-Depois desse exemplo, o auxiliar `send()` de `support.ts` reutiliza as operações
-comuns de seleção, preenchimento, envio e verificação da resposta nos demais
-cenários. Assim, uma chamada como
+O auxiliar `send()` de `support.ts` reutiliza as operações comuns de seleção,
+preenchimento, envio e verificação da resposta nos cenários. Assim, uma chamada como
 `await send(page, 'students-create', 201, { body: student })` reúne essas etapas.
+Ele verifica o status, os headers e o corpo exibidos na interface e compara o
+JSON apresentado com a resposta HTTP recebida.
 
 ## Como apresentar o projeto na aula
 
@@ -47,8 +46,8 @@ navegador, sem reestruturar a aplicação.
 
 Ordem sugerida para apresentar os exemplos:
 
-1. Cadastro de aluno com ações explícitas: localizar campos, selecionar a
-   operação, preencher o JSON, clicar e verificar o resultado visível.
+1. Cadastro de aluno com `send()`: acompanhar em `support.ts` como o auxiliar
+   localiza campos, seleciona a operação, preenche o JSON, clica e verifica o resultado.
 2. Consulta do aluno cadastrado: mostrar a consulta após o cadastro no mesmo
    cenário, como ocorre no fluxo completo. Cada teste restaura o banco antes de
    começar; um cenário não depende dos dados criados pelo anterior.
@@ -64,7 +63,7 @@ Ordem sugerida para apresentar os exemplos:
 
 ## Cenários
 
-- Cadastro de um aluno pela interface, com as ações explícitas.
+- Cadastro de um aluno pela interface usando `send()` e comparação do objeto retornado.
 - Seleção da operação e prévia da requisição.
 - Listagem e busca dos dados iniciais de alunos, disciplinas e matrículas.
 - Cadastro de aluno e disciplina, matrícula e consulta após recarregar a página.

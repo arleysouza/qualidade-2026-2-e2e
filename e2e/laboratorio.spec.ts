@@ -1,22 +1,8 @@
 import { test, expect, send } from './support';
 
 test('cadastra um aluno pela interface', async ({ page }) => {
-  await page.getByLabel('Operação', { exact: true })
-    .selectOption('students-create');
-
-  await page.getByLabel('Corpo da requisição · JSON', { exact: true })
-    .fill(JSON.stringify({
-      ra: 900003,
-      name: 'Mariana',
-    }));
-
-  await page.getByRole('button', { name: 'Enviar requisição →' }).click();
-
-  await expect(page.getByRole('status')).toContainText('201');
-  await expect(page.getByRole('region', {
-    name: 'Corpo da resposta',
-    exact: true,
-  })).toContainText('Mariana');
+  const student = { ra: 900003, name: 'Mariana' };
+  expect(await send(page, 'students-create', 201, { body: student })).toEqual(student);
 });
 
 test('seleciona operações e prepara a requisição', async ({ page }) => {
@@ -91,7 +77,6 @@ test('bloqueia JSON inválido e permite corrigir e reenviar', async ({ page }) =
   await expect(page.getByRole('status')).toHaveText('Requisição não enviada');
   expect(requests).toHaveLength(0);
   await expect(page.getByRole('button', { name: 'Enviar requisição →' })).toBeEnabled();
-  expect(await send(page, 'students-create', 201, {
-    body: { ra: 900002, name: 'JSON corrigido' },
-  })).toEqual({ ra: 900002, name: 'JSON corrigido' });
+  const student = { ra: 900002, name: 'JSON corrigido' };
+  expect(await send(page, 'students-create', 201, { body: student })).toEqual(student);
 });

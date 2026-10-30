@@ -18,7 +18,7 @@ A suíte contém **13 cenários**:
 
 | Grupo | Casos | Verificações |
 | --- | --- | --- |
-| Cadastro pela interface | 1 | Seleção, preenchimento e clique explícitos; status 201 e nome no corpo da resposta. |
+| Cadastro pela interface | 1 | Seleção, preenchimento e clique via `send()`; status 201 e objeto do aluno no corpo da resposta. |
 | Preparação da requisição | 1 | Seleção da operação, método, caminho, habilitação do corpo e prévia do JSON. |
 | Listagens | 3 | Dados iniciais de alunos, disciplinas e matrículas. |
 | Buscas | 3 | Consulta de um registro inicial de cada recurso. |
