@@ -1,8 +1,8 @@
 # Interface e automação E2E
 
 Os testes usam `getByTestId()` para localizar elementos por `data-testid`,
-independentemente dos rótulos e títulos visíveis. Os rótulos, papéis e atributos
-ARIA continuam disponíveis para acessibilidade.
+independentemente dos rótulos e títulos visíveis. Os campos mantêm seus rótulos
+HTML, e o painel de resposta usa `aria-busy` para indicar uma atualização em curso.
 
 | Elemento | `data-testid` |
 | --- | --- |
