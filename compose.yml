@@ -1,7 +1,7 @@
 # As variáveis ${...} são lidas do .env ao lado deste arquivo.
+name: aula4
 services:
   database:
-    image: aula4-database:1.0
     build: ./database
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -10,7 +10,7 @@ services:
     ports:
       - "${DB_PORT_HOST}:${DB_PORT}"
     volumes:
-      - aula4_database_data:/var/lib/postgresql
+      - database_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
       interval: 5s
@@ -19,7 +19,6 @@ services:
       start_period: 10s
 
   server:
-    image: aula4-server:1.0
     build: ./server
     ports:
       - "${SERVER_PORT_HOST}:${SERVER_PORT}"
@@ -41,7 +40,6 @@ services:
         condition: service_healthy
 
   front:
-    image: aula4-front:1.0
     build: ./front
     ports:
       - "${FRONT_PORT_HOST}:80"
@@ -52,4 +50,4 @@ services:
         condition: service_healthy
 
 volumes:
-  aula4_database_data:
+  database_data:

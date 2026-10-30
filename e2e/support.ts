@@ -25,28 +25,28 @@ export { expect };
 
 export async function send(page: Page, operation: string, status: number,
   options: { path?: string; body?: unknown } = {}) {
-  await page.getByLabel('Operação', { exact: true }).selectOption(operation);
-  if (options.path) await page.getByLabel('Caminho do recurso').fill(options.path);
+  await page.getByTestId('example').selectOption(operation);
+  if (options.path) await page.getByTestId('path').fill(options.path);
   if (options.body !== undefined) {
-    await page.getByLabel('Corpo da requisição · JSON', { exact: true })
+    await page.getByTestId('body')
       .fill(JSON.stringify(options.body));
   }
-  const method = await page.getByLabel('Método', { exact: true }).inputValue();
-  const path = await page.getByLabel('Caminho do recurso').inputValue();
+  const method = await page.getByTestId('method').inputValue();
+  const path = await page.getByTestId('path').inputValue();
   const responsePromise = page.waitForResponse(response =>
     new URL(response.url()).pathname === path && response.request().method() === method);
-  await page.getByRole('button', { name: 'Enviar requisição →' }).click();
+  await page.getByTestId('send').click();
   const response = await responsePromise;
   expect(response.status()).toBe(status);
-  await expect(page.getByRole('status')).toContainText(String(status));
-  await expect(page.getByRole('status')).toHaveAttribute('data-status-code', String(status));
-  await expect(page.getByRole('status')).toHaveAttribute('data-state', status < 400 ? 'success' : 'http-error');
-  await expect(page.getByRole('region', { name: 'Resposta', exact: true }))
+  await expect(page.getByTestId('status')).toContainText(String(status));
+  await expect(page.getByTestId('status')).toHaveAttribute('data-status-code', String(status));
+  await expect(page.getByTestId('status')).toHaveAttribute('data-state', status < 400 ? 'success' : 'http-error');
+  await expect(page.getByTestId('response'))
     .toHaveAttribute('aria-busy', 'false');
-  await expect(page.getByRole('button', { name: 'Enviar requisição →' })).toBeEnabled();
-  await expect(page.getByRole('region', { name: 'Headers da resposta', exact: true }))
+  await expect(page.getByTestId('send')).toBeEnabled();
+  await expect(page.getByTestId('response-headers'))
     .toContainText('application/json');
-  const displayed = JSON.parse(await page.getByRole('region', { name: 'Corpo da resposta', exact: true }).innerText());
+  const displayed = JSON.parse(await page.getByTestId('response-body').innerText());
   expect(displayed).toEqual(await response.json());
   return displayed;
 }

@@ -1,8 +1,27 @@
 # Interface e automação E2E
 
-Prefira localizar campos pelos rótulos e o botão pelo nome “Enviar requisição →”.
-As regiões “Requisição preparada”, “Headers da resposta” e “Corpo da resposta”
-possuem nomes acessíveis e podem ser localizadas por `getByRole("region", { name })`.
+Os testes usam `getByTestId()` para localizar elementos por `data-testid`,
+independentemente dos rótulos e títulos visíveis. Os rótulos, papéis e atributos
+ARIA continuam disponíveis para acessibilidade.
+
+| Elemento | `data-testid` |
+| --- | --- |
+| Título da página | `page-title` |
+| Operação | `example` |
+| Endereço base | `base` |
+| Método | `method` |
+| Caminho do recurso | `path` |
+| Corpo da requisição | `body` |
+| Botão de envio | `send` |
+| Requisição preparada | `request-preview` |
+| Painel de resposta | `response` |
+| Status | `status` |
+| Headers da resposta | `response-headers` |
+| Corpo da resposta | `response-body` |
+
+Exemplo: `page.getByTestId('response-body')`. Mantenha os identificadores estáveis
+ao alterar textos da interface. As asserções sobre conteúdo continuam verificando
+os valores esperados pelo cenário.
 
 O seletor “Operação” usa valores fixos, independentes da posição das opções:
 
@@ -33,3 +52,5 @@ Os IDs existentes foram preservados. A suíte E2E está documentada em
 [e2e/README.md](../e2e/README.md). Os exemplos de busca e de matrícula duplicada
 pressupõem os dados de `database/seed.sql`; cenários de criação devem preparar
 seus dados em um banco isolado.
+
+

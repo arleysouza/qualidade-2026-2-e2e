@@ -47,7 +47,7 @@ navegador, sem reestruturar a aplicação.
 Ordem sugerida para apresentar os exemplos:
 
 1. Cadastro de aluno com `send()`: acompanhar em `support.ts` como o auxiliar
-   localiza campos, seleciona a operação, preenche o JSON, clica e verifica o resultado.
+   localiza campos por `getByTestId()`, seleciona a operação, preenche o JSON, clica e verifica o resultado.
 2. Consulta do aluno cadastrado: mostrar a consulta após o cadastro no mesmo
    cenário, como ocorre no fluxo completo. Cada teste restaura o banco antes de
    começar; um cenário não depende dos dados criados pelo anterior.
@@ -95,7 +95,7 @@ docker compose -f compose.e2e.yml -p aula4-e2e down --remove-orphans
 ```
 
 O Playwright usa esperas de rede e asserções com repetição, sem pausas fixas.
-Os seletores usam rótulos e regiões acessíveis; os IDs das operações são
-documentados em `front/README.md`.
+Os seletores usam `getByTestId()` com atributos `data-testid` estáveis,
+independentes dos rótulos. Consulte os identificadores em `front/README.md`.
 
 Referência: [documentação do Playwright Test](https://playwright.dev/docs/intro).

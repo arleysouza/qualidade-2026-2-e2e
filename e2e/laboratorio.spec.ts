@@ -6,14 +6,14 @@ test('cadastra um aluno pela interface', async ({ page }) => {
 });
 
 test('seleciona operações e prepara a requisição', async ({ page }) => {
-  await expect(page.getByRole('heading', { name: 'Laboratório REST.' })).toBeVisible();
-  await expect(page.getByRole('status')).toHaveAttribute('data-state', 'idle');
-  await expect(page.getByLabel('Corpo da requisição · JSON', { exact: true })).toBeDisabled();
-  await page.getByLabel('Operação', { exact: true }).selectOption('students-create');
-  await expect(page.getByLabel('Método', { exact: true })).toHaveValue('POST');
-  await expect(page.getByLabel('Caminho do recurso')).toHaveValue('/api/students');
-  await page.getByLabel('Corpo da requisição · JSON', { exact: true }).fill('{"ra":900001,"name":"Aluno E2E"}');
-  const preview = page.getByRole('region', { name: 'Requisição preparada', exact: true });
+  await expect(page.getByTestId('page-title')).toBeVisible();
+  await expect(page.getByTestId('status')).toHaveAttribute('data-state', 'idle');
+  await expect(page.getByTestId('body')).toBeDisabled();
+  await page.getByTestId('example').selectOption('students-create');
+  await expect(page.getByTestId('method')).toHaveValue('POST');
+  await expect(page.getByTestId('path')).toHaveValue('/api/students');
+  await page.getByTestId('body').fill('{"ra":900001,"name":"Aluno E2E"}');
+  const preview = page.getByTestId('request-preview');
   await expect(preview).toContainText('POST http://127.0.0.1:18080/api/students');
   await expect(preview).toContainText('Content-Type: application/json');
   await expect(preview).toContainText('Aluno E2E');
@@ -70,13 +70,13 @@ test('bloqueia JSON inválido e permite corrigir e reenviar', async ({ page }) =
   page.on('request', request => {
     if (new URL(request.url()).pathname.startsWith('/api/')) requests.push(request.url());
   });
-  await page.getByLabel('Operação', { exact: true }).selectOption('students-create');
-  await page.getByLabel('Corpo da requisição · JSON', { exact: true }).fill('{');
-  await page.getByRole('button', { name: 'Enviar requisição →' }).click();
-  await expect(page.getByRole('status')).toHaveAttribute('data-state', 'validation-error');
-  await expect(page.getByRole('status')).toHaveText('Requisição não enviada');
+  await page.getByTestId('example').selectOption('students-create');
+  await page.getByTestId('body').fill('{');
+  await page.getByTestId('send').click();
+  await expect(page.getByTestId('status')).toHaveAttribute('data-state', 'validation-error');
+  await expect(page.getByTestId('status')).toHaveText('Requisição não enviada');
   expect(requests).toHaveLength(0);
-  await expect(page.getByRole('button', { name: 'Enviar requisição →' })).toBeEnabled();
+  await expect(page.getByTestId('send')).toBeEnabled();
   const student = { ra: 900002, name: 'JSON corrigido' };
   expect(await send(page, 'students-create', 201, { body: student })).toEqual(student);
 });

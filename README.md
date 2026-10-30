@@ -141,7 +141,7 @@ porque os cenários verificam frontend, API e banco em conjunto. Essa localizaç
 
 Adicione cenários em `e2e/laboratorio.spec.ts` ou em novos arquivos `*.spec.ts` dentro de `e2e/`. Importe `test` e `expect` de `./support` para utilizar a restauração automática do banco. O auxiliar `send()` seleciona uma operação, envia a requisição pela tela e verifica sua resposta.
 
-Use os rótulos dos campos, os nomes acessíveis das regiões e os valores fixos das operações documentados em [front/README.md](front/README.md). Prepare os dados necessários no próprio cenário e use os IDs retornados pela API. Aguarde respostas e condições da página, sem pausas fixas.
+Use `getByTestId()` com os atributos `data-testid` e os valores fixos das operações documentados em [front/README.md](front/README.md). Prepare os dados necessários no próprio cenário e use os IDs retornados pela API. Aguarde respostas e condições da página, sem pausas fixas.
 
 A cobertura atual se concentra nos fluxos do Laboratório REST. Não inclui testes de carga, concorrência, outros navegadores ou todas as combinações possíveis de validação da API. A referência operacional da suíte está em [e2e/README.md](e2e/README.md).
 
